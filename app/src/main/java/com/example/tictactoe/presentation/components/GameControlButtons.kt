@@ -17,7 +17,7 @@ fun GameControlButtons(
     onResetClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row {
+    Row(modifier = modifier) {
         FilledIconButton(
             onClick = onBackToSizePickClick
         ) {
