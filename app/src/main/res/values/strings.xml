@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="back_to_size_pick">Back to size pick</string>
+    <string name="reset_game_field">Reset game field</string>
+    <string name="x_turn">X\'s turn!</string>
+    <string name="o_turn">O\'s turn!</string>
+    <string name="x_won">X won!</string>
+    <string name="o_won">O won!</string>
+    <string name="draw">Draw!</string>
+    <string name="pick_size_to_start">Pick field size to start!</string>
+</resources>
