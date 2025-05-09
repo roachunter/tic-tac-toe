@@ -14,13 +14,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TicTacToeViewModel : ViewModel() {
+    // time for player's turn
     private val turnTime = 10000
+    // how often should turn time be updated
     private val tickTime = 16
+    // job that holds the timer
     private var turnTimerJob: Job? = null
 
+    // game state flow
     private val _state = MutableStateFlow(TicTacToeState())
+    // remaining turn time flow
     private val _remainingTurnTime = MutableStateFlow(turnTime)
 
+    // combining game state and turn time
+    // into single flow to share with ui
     val state = combine(
         _state, _remainingTurnTime
     ) { state, remainingTurnTime ->
@@ -33,6 +40,7 @@ class TicTacToeViewModel : ViewModel() {
         TicTacToeState()
     )
 
+    // responds to events from ui
     fun onEvent(event: TicTacToeEvent) {
         when (event) {
             is TicTacToeEvent.OnFieldSizePick -> initGame(event.fieldSize)
@@ -42,6 +50,7 @@ class TicTacToeViewModel : ViewModel() {
         }
     }
 
+    // initializes game by setting initial game state
     private fun initGame(fieldSize: Int) {
         _state.update {
             TicTacToeState(
@@ -54,6 +63,7 @@ class TicTacToeViewModel : ViewModel() {
         startTurnTimer()
     }
 
+    // resets game field
     private fun resetGame() {
         _state.update {
             it.copy(
@@ -66,6 +76,7 @@ class TicTacToeViewModel : ViewModel() {
         startTurnTimer()
     }
 
+    // drives user back to size picking screen
     private fun backToSizePick() {
         _state.update {
             it.copy(
@@ -135,6 +146,7 @@ class TicTacToeViewModel : ViewModel() {
         return null
     }
 
+    // Returns all possible win lines for the given field size
     private fun calcWinLines(fieldSize: Int): List<List<Int>> {
         val lines = mutableListOf<List<Int>>()
 
@@ -167,7 +179,7 @@ class TicTacToeViewModel : ViewModel() {
     }
 
     private fun startTurnTimer() {
-        turnTimerJob?.cancel()
+        stopTurnTimer()
         _remainingTurnTime.update { turnTime }
 
         turnTimerJob = viewModelScope.launch {
